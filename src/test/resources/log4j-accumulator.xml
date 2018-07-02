@@ -1,0 +1,28 @@
+<Configuration status="warn" name="RoutingTest" packages="org.apache.logging.log4j.core,com.falmarri">
+
+    <Appenders>
+        <Console name="STDOUT">
+            <PatternLayout pattern="%X %m%n"/>
+        </Console>
+        <List name="List">
+            <PatternLayout pattern="%level,%X{traceToken},%X{userId},%msg%n" />
+        </List>
+        <Accumulate name="Acc" groupby="traceToken,userId" accumulateLevel="trace" maxAccumulation="3">
+            <AppenderRef ref="List"/>
+        </Accumulate>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="EventLogger" level="trace" additivity="false">
+            <AppenderRef ref="Acc"/>
+        </Logger>
+
+        <Logger name="com.falmarri" level="trace" additivity="false">
+            <AppenderRef ref="Acc"/>
+        </Logger>
+        <Root level="error">
+            <AppenderRef ref="STDOUT"/>
+        </Root>
+    </Loggers>
+
+</Configuration>
